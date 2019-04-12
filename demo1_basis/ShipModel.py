@@ -1,7 +1,7 @@
-from cgm_engine import *
+from coremon_main import *
 from defs1 import *
 from gameobjects.Vector2d import Vector2d
-from glvars import SCREEN_SIZE
+from glob_scope1 import SCREEN_SIZE
 import random
 
 

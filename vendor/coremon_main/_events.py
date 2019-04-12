@@ -6,7 +6,7 @@ import pygame
 from pygame.event import Event as PygameEvent
 from pygame.locals import USEREVENT
 
-from cgm_engine.Singleton import Singleton
+from coremon_main.Singleton import Singleton
 from ._defs import EngineEvTypes, FIRST_CUSTO_TYPE
 
 

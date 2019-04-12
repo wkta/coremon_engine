@@ -1,5 +1,5 @@
-from cgm_engine.Singleton import Singleton
-from cgm_engine.util import underscore_format
+from coremon_main.Singleton import Singleton
+from coremon_main.util import underscore_format
 import sys
 import traceback
 

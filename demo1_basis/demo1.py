@@ -1,14 +1,14 @@
 from RocksModel import RocksModel
 from ShipModel import ShipModel
-from cgm_engine.runners import VanillaGameCtrl
-import cgm_engine
+from coremon_main.runners import VanillaGameCtrl
+import coremon_main
 from TinyWorldView import TinyWorldView
 from ShipCtrl import ShipCtrl
-from glvars import SCREEN_SIZE, CAPTION
+from glob_scope1 import SCREEN_SIZE, CAPTION
 
 
 # - entry point
-cgm_engine.init(SCREEN_SIZE, CAPTION)
+coremon_main.init(SCREEN_SIZE, CAPTION)
 
 # - building specific components
 shipm = ShipModel()

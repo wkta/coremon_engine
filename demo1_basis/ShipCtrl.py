@@ -1,4 +1,4 @@
-from cgm_engine import *
+from coremon_main import *
 
 
 class ShipCtrl(EventReceiver):

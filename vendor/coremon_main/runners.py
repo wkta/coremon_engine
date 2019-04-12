@@ -1,8 +1,8 @@
 import pygame
 from pygame import constants
 
-from cgm_engine.StContainer import StContainer
-from cgm_engine.structures import Stack
+from coremon_main.StContainer import StContainer
+from coremon_main.structures import Stack
 from ._events import EngineEvTypes, EventManager, EventReceiver
 
 

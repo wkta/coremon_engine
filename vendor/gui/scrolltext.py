@@ -1,6 +1,6 @@
 import sys
 
-from cgm_engine import EventReceiver, PygameBridge
+from coremon_main import EventReceiver, PygameBridge
 
 sys.path.append('..')
 import eventtypes

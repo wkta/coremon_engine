@@ -1,5 +1,5 @@
 import sys
-from cgm_engine import EventReceiver
+from coremon_main import EventReceiver
 sys.path.append('..')
 from gui.TextInput import TextInput
 import gui.scrolltext as scrolltext

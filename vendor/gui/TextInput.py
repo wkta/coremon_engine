@@ -1,8 +1,8 @@
 import pygame
 
-import cgm_engine
-from cgm_engine import EventReceiver, PygameBridge, EngineEvTypes
-from cgm_engine.runners import VanillaGameCtrl
+import coremon_main
+from coremon_main import EventReceiver, PygameBridge, EngineEvTypes
+from coremon_main.runners import VanillaGameCtrl
 
 
 class TextInput(EventReceiver):
@@ -180,7 +180,7 @@ class TextInput(EventReceiver):
 
 # --- DÉMO. FONCTIONNEMENT
 if __name__ == '__main__':
-    cgm_engine.init((800, 600))
+    coremon_main.init((800, 600))
     pygame.key.set_repeat(500, 30)
 
 
@@ -200,12 +200,12 @@ if __name__ == '__main__':
         def proc_event(self, ev, source):
             if ev.type == EngineEvTypes.PAINT:
                 # print(te.text, len(te.text), te.caretpos)
-                cgm_engine.screen.fill((0, 0, 0))
-                cgm_engine.screen.blit(self.te.image, self.te.position)
+                coremon_main.screen.fill((0, 0, 0))
+                coremon_main.screen.blit(self.te.image, self.te.position)
 
 
     bv = BasicView(txt_entry)
-    mger = cgm_engine.EventManager.instance()
+    mger = coremon_main.EventManager.instance()
     bv.turn_on()
     txt_entry.turn_on()
 

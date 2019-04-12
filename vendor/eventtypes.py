@@ -4,7 +4,7 @@ from pygame import USEREVENT
 
 
 # ---constants---##ffff00
-from cgm_engine import CgmEvent
+from coremon_main import CgmEvent
 
 __game = 220
 __netw = 240

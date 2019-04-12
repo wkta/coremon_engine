@@ -1,5 +1,5 @@
-from cgm_engine import EventReceiver, EngineEvTypes, EventManager, CgmEvent
-from cgm_engine.networking.EnvoiAsynchrone2 import EnvoiAsynchrone2
+from coremon_main import EventReceiver, EngineEvTypes, EventManager, CgmEvent
+from coremon_netw.EnvoiAsynchrone2 import EnvoiAsynchrone2
 import defs_mco.glvars as glvars
 
 

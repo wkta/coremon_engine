@@ -1,5 +1,5 @@
-import cgm_engine
-from cgm_engine import *
+import coremon_main
+from coremon_main import *
 from defs1 import *
 import math
 from gameobjects.Vector2d import Vector2d
@@ -12,7 +12,7 @@ class TinyWorldView(EventReceiver):
 
     def __init__(self, ref_mod, rocksm):
         super().__init__()
-        self.screen = cgm_engine.screen
+        self.screen = coremon_main.screen
 
         self.curr_pos = ref_mod.get_scr_pos()
         self.curr_angle = ref_mod.get_orientation()
