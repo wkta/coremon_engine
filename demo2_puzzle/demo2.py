@@ -11,7 +11,6 @@ mod = PuzzleMod()
 v = PuzzleView(mod)
 c = PuzzleCtrl(mod)
 ctrl = VanillaGameCtrl()
-ctrl.set_autoquit(True)
 
 # - run the game
 v.turn_on()

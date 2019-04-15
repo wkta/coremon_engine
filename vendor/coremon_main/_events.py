@@ -167,8 +167,8 @@ class EventReceiver(CogObject):
     def is_active(self):
         return self._active_receiver
 
-    def turn_on(self):
-        self._manager.add_listener(self)
+    def turn_on(self, prio=None):
+        self._manager.add_listener(self, prio)
         self._active_receiver = True
 
     def turn_off(self):

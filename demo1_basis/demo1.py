@@ -20,7 +20,6 @@ for receiver in (view, ctrl):
 
 # - building the generic component (game runner)
 game_ctrl = VanillaGameCtrl()
-game_ctrl.set_autoquit(True)
 game_ctrl.turn_on()
 
 # - let's run the game loop (blocking method)

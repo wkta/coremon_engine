@@ -16,7 +16,7 @@ class VanillaGameCtrl(EventReceiver):
         self.max_fps = max_fps
         self._autoquit = True
 
-    def set_autoquit(self, bool_val):
+    def set_autoquit(self, bool_val=True):
         assert isinstance(bool_val, bool)
         self._autoquit = bool_val
 
