@@ -51,6 +51,9 @@ class StackBasedGameCtrl(VanillaGameCtrl):
         # calling enter method...
         self._st_container.retrieve(init_gs_id).enter()
 
+    def get_curr_state_ident(self):
+        return self.__state_stack.peek()
+
     def proc_event(self, ev, source):
         super().proc_event(ev, source)
 
