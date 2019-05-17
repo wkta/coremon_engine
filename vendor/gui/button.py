@@ -13,13 +13,19 @@ def test_func():
 
 
 class Button(EventReceiver):
-    
+
+    HIDEOUS_PURPLE = (255, 0, 255)
+
     def __init__(self, font, text, position_on_screen, callback=None, draw_background=True):
         super().__init__()
         padding_value = 20  # pixels
-        background_color = (100, 100, 100)
-        if not draw_background:
-            background_color = (255, 0, 255)  # hideous purple
+
+        if draw_background:
+            self.bg_color = (100, 100, 100)
+            self.fg_color = (255, 255, 255)
+        else:
+            self.bg_color = self.HIDEOUS_PURPLE
+            self.fg_color = (0, 0, 0)
 
         # data
         self._callback = callback
@@ -28,24 +34,30 @@ class Button(EventReceiver):
         
         # dawing
         self.font = font
+        self.txt = text
         size = font.size(text)
+        self.tmp_size = size
         self.position = position_on_screen
         self._col_rect = pygame.Rect(self.position, size).inflate(padding_value, padding_value)
         self._col_rect.topleft = self.position
         
-        self.image = pygame.Surface(self._col_rect.size).convert()
-        self.image.fill(background_color)
+        self.image = None
+        self.refresh_img()
 
-        if draw_background:
-            textimg = font.render(text, 1, (255, 255, 255), background_color)
+    def refresh_img(self):
+        self.image = pygame.Surface(self._col_rect.size).convert()
+        self.image.fill(self.bg_color)
+
+        if self.bg_color != self.HIDEOUS_PURPLE:
+            textimg = self.font.render(self.txt, True, self.fg_color, self.bg_color)
         else:
-            textimg = font.render(text, True, (0, 0, 0)) #, (190,)*3)
-        xpos = (self._col_rect.width - size[0]) / 2
-        ypos = (self._col_rect.height - size[1]) / 2
+            textimg = self.font.render(self.txt, False, self.fg_color)
+        xpos = (self._col_rect.width - self.tmp_size[0]) / 2
+        ypos = (self._col_rect.height - self.tmp_size[1]) / 2
         self.image.blit(textimg, (xpos, ypos))
 
-        if not draw_background:
-            self.image.set_colorkey((background_color))
+        if self.bg_color == self.HIDEOUS_PURPLE:
+            self.image.set_colorkey((self.bg_color))
             box_color = (190,)*3
             full_rect = (0, 0, self.image.get_size()[0], self.image.get_size()[1])
             pygame.draw.rect(self.image, box_color, full_rect, 1)
