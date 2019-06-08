@@ -13,9 +13,9 @@ optimize the production process of indie games meant to be published via the new
 
 ## preview / basic examples
 
-![puzzle game](preview-2.png = 400x)
+<img src="preview-2.png" alt="puzzle game" width="580"/>
 
-![random maze](preview-1.png = 400x)
+<img src="preview-1.png" alt="random maze" width="580"/>
 
 ## principles / engine features
 - uses the MVC design pattern
