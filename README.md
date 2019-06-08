@@ -21,6 +21,10 @@ SpriteSheet, RandomMaze for level generation, DijkstraPathfinder for pathfinding
 ## credits/creation date
 author: Thomas "wkta" Iwaszko (c)
 
-The first coremon engine release occured on June, 8th 2019
+The coremon engine development started somewhere around august 2018.
 
-see LICENSE.txt for licensing informations
+See LICENSE.txt for license information!
+
+![](preview-1.png)
+
+![](preview-2.png)

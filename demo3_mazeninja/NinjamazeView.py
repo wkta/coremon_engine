@@ -10,7 +10,7 @@ import os
 class NinjamazeView(EventReceiver):
 
     CELL_SIDE = 32  # px
-    BLACK = (0, 0, 0)
+    BG_COL = (16, 64, 16)
 
     def __init__(self, ref_mod):
         super().__init__()
@@ -35,7 +35,7 @@ class NinjamazeView(EventReceiver):
             self.pos_avatar = ev.new_pos
 
     def _draw_content(self, scr):
-        scr.fill(self.BLACK)
+        scr.fill(self.BG_COL)
 
         nw_corner = (0, 0)
         tmp_r4 = [None, None, None, None]
