@@ -11,20 +11,22 @@ The engine may run properly with earlier versions, although I cannot guarantee t
 ## long-term objective
 optimize the production process of indie games meant to be published via the new http://ludo.store platform
 
-## principles/features
+## preview / basic examples
+
+![puzzle game](preview-2.png = 400x)
+
+![random maze](preview-1.png = 400x)
+
+## principles / engine features
 - uses the MVC design pattern
 - event-driven engine
 - allows for easy definition of your own events
 - comes bundled with a set of handy tools:
 SpriteSheet, RandomMaze for level generation, DijkstraPathfinder for pathfinding, etc.
 
-## credits/creation date
+## credits / creation date
 author: Thomas "wkta" Iwaszko (c)
 
 The coremon engine development started somewhere around august 2018.
 
-See LICENSE.txt for license information!
-
-![](preview-1.png)
-
-![](preview-2.png)
+See LICENSE for license information.
