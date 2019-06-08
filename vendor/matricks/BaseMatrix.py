@@ -38,13 +38,13 @@ class BaseMatrix(object):
     def isValidValue(cls, val):
         pass
 
-    def getValue(self, i, j):
-        if self.isOut(i, j):
+    def get_val(self, i, j):
+        if self.is_out(i, j):
             raise ValueError('coords {} {} out of bounds for the current matrix'.format(i, j))
         adhoc_ind = j * self.width + i
         return self.repr_1d[adhoc_ind]
 
-    def setValue(self, i, j, val):
+    def set_val(self, i, j, val):
         if not self.__class__.isValidValue(val):
             raise ValueError(
                 'val {} incompatible avec le type de matrice utilisé ({})'.format(val, self.__class__.__name__)
@@ -55,19 +55,13 @@ class BaseMatrix(object):
     def setAllValues(self, val):
         for i in range(self.width):
             for j in range(self.height):
-                self.setValue(i, j, val)
+                self.set_val(i, j, val)
 
-    def isOut(self, i, j):
+    def is_out(self, i, j):
         return not (0 <= i < self.width and 0 <= j < self.height)
 
-    def getSize(self):
+    def get_size(self):
         return self.width, self.height
-
-    def getWidth(self):
-        return self.width
-
-    def getHeight(self):
-        return self.height
 
     def __str__(self):
         res = '{} x {} matrix'.format(self.width, self.height)

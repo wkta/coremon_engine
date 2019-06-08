@@ -1,4 +1,4 @@
-from tools.BaseMatrix import BaseMatrix
+from matricks.BaseMatrix import BaseMatrix
 
 
 class IntegerMatrix(BaseMatrix):

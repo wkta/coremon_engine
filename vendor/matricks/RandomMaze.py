@@ -1,5 +1,6 @@
 import random
-from tools.IntegerMatrix import IntegerMatrix
+from matricks.IntegerMatrix import IntegerMatrix
+
 
 SYM_UP, SYM_DOWN, SYM_LEFT, SYM_RIGHT = range(4)
 
@@ -74,16 +75,18 @@ class RandomMaze:
         for i in range(1, w - 1, 2):
             for j in range(1, h - 1, 2):
                 pos = (i, j)
-                if self.int_matrix.getValue(*pos) is None:
+                if self.int_matrix.get_val(*pos) is None:
                     self.__growMaze(pos)
 
         # (3) connexion de regions (creuse les jonctions)
         self.candidats_connexion = list()
         self.li_connecteurs = list()
-        for i in range(0, self.int_matrix.getWidth()):
-            for j in range(0, self.int_matrix.getHeight()):
+        dim = self.int_matrix.get_size()
+        for i in range(dim[0]):
+            for j in range(dim[1]):
                 if self.__canBeConnector((i, j)):
                     self.candidats_connexion.append((i, j))
+
         self.regions_to_blobs = dict()
         while self.canMerge():
             self.stepMerge()
@@ -93,7 +96,7 @@ class RandomMaze:
         self.recUncarve((1, 1))
 
     def isRoomRegion(self, pos):
-        val = self.int_matrix.getValue(*pos)
+        val = self.int_matrix.get_val(*pos)
         return val in self.all_room_codes
 
     def recUncarve(self, pos):
@@ -101,37 +104,37 @@ class RandomMaze:
             return
         self.tested_pos.add(pos)
 
-        m_size = self.int_matrix.getSize()
+        m_size = self.int_matrix.get_size()
         voisins = cell_voisinnes(pos, m_size)
         nb_cell_carved_v = 0  # sera un nb entre 1 et 4
         for v in voisins:
-            if self.int_matrix.getValue(*v) is not None:
+            if self.int_matrix.get_val(*v) is not None:
                 nb_cell_carved_v += 1
 
         if nb_cell_carved_v == 1:
-            self.int_matrix.setValue(pos[0], pos[1], None)
+            self.int_matrix.set_val(pos[0], pos[1], None)
             for v in voisins:
                 if v in self.tested_pos:
                     self.tested_pos.remove(v)
 
         for v in voisins:
-            if self.int_matrix.getValue(*v) is not None:
+            if self.int_matrix.get_val(*v) is not None:
                 self.recUncarve(v)
 
     def __detRegionsProches(self, c):
         # -- traitement basique : lister les codes distincts des régions voisines
-        m_size = self.int_matrix.getSize()
+        m_size = self.int_matrix.get_size()
         voisins = cell_voisinnes(c, m_size)
         ens_tmp = set()
         for v in voisins:
-            tmp_val = self.int_matrix.getValue(*v)
+            tmp_val = self.int_matrix.get_val(*v)
             if tmp_val is not None:
                 ens_tmp.add(tmp_val)
         return list(ens_tmp)
 
     def __canBeConnector(self, pos):
         # un connecteur : est avant tt un mur, il doit letre
-        tmp_val = self.int_matrix.getValue(*pos)
+        tmp_val = self.int_matrix.get_val(*pos)
         if tmp_val is not None:
             return False
 
@@ -188,12 +191,12 @@ class RandomMaze:
         murs_voisins = list()
         for d in DIRS:
             tmp = (i + COORD_OFFSET[d][0], j + COORD_OFFSET[d][1])
-            if self.int_matrix.getValue(*tmp) is None:
+            if self.int_matrix.get_val(*tmp) is None:
                 murs_voisins.append(tmp)
         return murs_voisins
 
     def __mergeRegions(self, current_cell, cod_region_a, cod_region_b):
-        self.int_matrix.setValue(current_cell[0], current_cell[1], cod_region_a)
+        self.int_matrix.set_val(current_cell[0], current_cell[1], cod_region_a)
 
         self.candidats_connexion.remove(current_cell)
         self.li_connecteurs.append(current_cell)
@@ -234,7 +237,8 @@ class RandomMaze:
         else:
             taille_room = random.choice(self.room_possib_size)
 
-        w, h = self.int_matrix.getWidth(), self.int_matrix.getHeight()
+        w, h = self.int_matrix.get_size()
+
         if self.nb_rooms == 0:
             pos_salle = [
                 (w - taille_room) // 2,
@@ -263,7 +267,7 @@ class RandomMaze:
         # salle empiete sur qq chose ?
         for i in range(pos_salle[0] - 1, pos_salle[0] + taille_room + 2):
             for j in range(pos_salle[1] - 1, pos_salle[1] + taille_room + 2):
-                if self.int_matrix.getValue(i, j) is not None:
+                if self.int_matrix.get_val(i, j) is not None:
                     return
 
         # --- création room
@@ -273,12 +277,12 @@ class RandomMaze:
 
         for i in range(pos_salle[0], pos_salle[0] + taille_room):
             for j in range(pos_salle[1], pos_salle[1] + taille_room):
-                self.int_matrix.setValue(i, j, code)
+                self.int_matrix.set_val(i, j, code)
         self.nb_rooms += 1
         self.all_room_codes.add(code)
 
     def __carve(self, pos):
-        self.int_matrix.setValue(pos[0], pos[1], self.getRegion())
+        self.int_matrix.set_val(pos[0], pos[1], self.getRegion())
 
     def __canCarve(self, from_pos, direction):
         base_offset = COORD_OFFSET[direction]
@@ -287,7 +291,7 @@ class RandomMaze:
         offset = tuple(offset)
         dest = (from_pos[0] + offset[0], from_pos[1] + offset[1])
 
-        m_size = self.int_matrix.getSize()
+        m_size = self.int_matrix.get_size()
         if not cell_in_range(dest, m_size):
             return False
 
@@ -295,7 +299,7 @@ class RandomMaze:
         offset = map(lambda x: x * 2, base_offset)
         offset = tuple(offset)
         dest = (from_pos[0] + offset[0], from_pos[1] + offset[1])
-        return self.int_matrix.getValue(*dest) is None
+        return self.int_matrix.get_val(*dest) is None
 
     def __growMaze(self, pos):
         lastDir = None

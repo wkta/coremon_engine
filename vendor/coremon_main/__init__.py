@@ -32,3 +32,8 @@ def init(scr_size=None, caption=None):
         screen = pygame.display.set_mode(scr_size)
     else:
         screen = pygame.display.set_mode(DEFAULT_SCREEN_SIZE)
+
+def cleanup():
+    global  screen
+    del screen
+    pygame.quit()
