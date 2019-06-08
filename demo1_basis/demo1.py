@@ -1,3 +1,7 @@
+# those two lines are useful if running without PyCharm /proper "Content Root" settings...
+import sys
+sys.path.append('../vendor')
+
 from RocksModel import RocksModel
 from ShipModel import ShipModel
 from coremon_main.runners import VanillaGameCtrl
@@ -31,4 +35,6 @@ print('------------')
 print()
 
 game_ctrl.loop()
+
+coremon_main.cleanup()
 print('done.')
