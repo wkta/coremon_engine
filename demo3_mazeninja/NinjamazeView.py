@@ -19,8 +19,9 @@ class NinjamazeView(EventReceiver):
 
         img = pygame.image.load(os.path.join('assets', 'tileset.png')).convert()
         self.tileset = SpriteSheet(img, grid_rez)
+        img = pygame.image.load(os.path.join('assets', '1.png')).convert()
         self.planche_avatar = SpriteSheet(
-            pygame.image.load(os.path.join('assets', '1.png')),
+            img,
             grid_rez,
             colorkey=(255,0,255)
         )

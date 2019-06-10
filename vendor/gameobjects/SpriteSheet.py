@@ -12,15 +12,15 @@ class SpriteSheet:
             self.taille_sprite[0] *= 2
             self.taille_sprite[1] *= 2
 
-        rezz = pygame_img.convert()
+        self.planche = pygame_img
+        w, h = self.planche.get_size()
         if flip_horz:
-            rezz = pygame.transform.flip(rezz, True, False)
+            self.planche = pygame.transform.flip(self.planche, True, False)
         if upscaling:
-            rezz = pygame.transform.scale(
-                rezz,
-                (rezz.get_width() * 2, rezz.get_height() * 2)
+            self.planche = pygame.transform.scale(
+                self.planche,
+                (w * 2, h * 2)
             )
-        self.planche = rezz
 
         self.nb_col = int(self.planche.get_width() / self.taille_sprite[0])
         assert self.nb_col > 0
