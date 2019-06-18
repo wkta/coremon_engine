@@ -6,6 +6,7 @@ import pygame
 from pygame.event import Event as PygameEvent
 from pygame.locals import USEREVENT
 
+import coremon_main as curr_module
 from coremon_main.Singleton import Singleton
 from ._defs import EngineEvTypes, FIRST_CUSTO_TYPE
 
@@ -99,7 +100,7 @@ class CogObject:
         if cls._manager is None:
             cls._manager = EventManager.instance()
             cls._lu_cached_ev = CgmEvent(EngineEvTypes.LOGICUPDATE, curr_t=None)
-            cls._paint_cached_ev = CgmEvent(EngineEvTypes.PAINT)
+            cls._paint_cached_ev = CgmEvent(EngineEvTypes.PAINT, screen=curr_module.screen)
 
         # - attribue un nouvel _id pour cette instance de CogObject
         self._id = self.__trouve_nouvel_id() if (explicit_id is None) else explicit_id
