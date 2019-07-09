@@ -69,7 +69,7 @@ class RandomMaze:
         self.all_room_codes = set()
         NB_ESSAIS = density_factor
         for i in range(NB_ESSAIS):
-            self.__addRoom()
+            self.__add_room()
 
         # (2) growing tree algo
         for i in range(1, w - 1, 2):
@@ -230,39 +230,22 @@ class RandomMaze:
     def getRegion(self):
         return self.curr_region
 
-    def __addRoom(self):
-        # essaye de placer une salle aleatoire
-        if self.nb_rooms == 0:
-            taille_room = max(self.room_possib_size)
-        else:
-            taille_room = random.choice(self.room_possib_size)
-
+    def __add_room(self):
+        taille_room = random.choice(self.room_possib_size)
         w, h = self.int_matrix.get_size()
 
-        if self.nb_rooms == 0:
-            pos_salle = [
-                (w - taille_room) // 2,
-                (h - taille_room) // 2]
-            if pos_salle[0] % 2 == 0:
-                offset_val = random.choice([+1, -1])
-                pos_salle[0] += offset_val
-            if pos_salle[1] % 2 == 0:
-                offset_val = random.choice([+1, -1])
-                pos_salle[1] += offset_val
+        bsupw = w - taille_room
+        bsuph = h - taille_room
 
-        else:
-            bsupw = w - taille_room
-            bsuph = h - taille_room
+        intervalle_x = [2 * x + 1 for x in range(0, bsupw // 2)]
+        intervalle_y = [2 * y + 1 for y in range(0, bsuph // 2)]
+        intervalle_x.pop()
+        intervalle_y.pop()
 
-            intervalle_x = [2 * x + 1 for x in range(0, bsupw // 2)]
-            intervalle_y = [2 * y + 1 for y in range(0, bsuph // 2)]
-            intervalle_x.pop()
-            intervalle_y.pop()
-
-            pos_salle = (
-                random.choice(intervalle_x),
-                random.choice(intervalle_y)
-            )
+        pos_salle = (
+            random.choice(intervalle_x),
+            random.choice(intervalle_y)
+        )
 
         # salle empiete sur qq chose ?
         for i in range(pos_salle[0] - 1, pos_salle[0] + taille_room + 2):

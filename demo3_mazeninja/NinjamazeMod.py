@@ -1,3 +1,5 @@
+import random
+
 from coremon_main import CogObject
 from defs3 import MyEvTypes
 from matricks.RandomMaze import RandomMaze
@@ -15,10 +17,16 @@ class NinjamazeMod(CogObject):
 
     def reset_level(self):
         w, h = 24, 24
-        self.rm = RandomMaze(w, h, 3, 5)
-        self.pev(MyEvTypes.NewLevel)
+        self.rm = RandomMaze(w, h, min_room_size=3, max_room_size=5)
 
-        self.player_pos = [w//2 -1, h//2 -1]
+        # let's choose a valid initial position for the avatar
+        floor = self.rm.getMatrix()
+        self.player_pos = [0, 0]
+        while floor.get_val(*self.player_pos) is None:  # i.e. a wall
+            self.player_pos[0] = random.randint(0, w-1)
+            self.player_pos[1] = random.randint(0, h-1)
+
+        self.pev(MyEvTypes.NewLevel)
         self.pev(MyEvTypes.PlayerMoves, new_pos=self.player_pos)
 
     def get_terrain(self):

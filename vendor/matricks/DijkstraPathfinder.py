@@ -21,7 +21,7 @@ class DijkstraPathfinder:
         for x in range(binf_x, bsup_x + 1):
             for y in range(binf_y, bsup_y +1):
                 k = (x, y)
-                if espace_matr.isOut(*k):
+                if espace_matr.is_out(*k):
                     continue
                 dist[k] = 99999
                 candidats.add(k)
@@ -52,13 +52,13 @@ class DijkstraPathfinder:
                 (u[0], u[1] - 1),
             ]
             for k in les_possib:
-                if espace_matr.isOut(*k):
+                if espace_matr.is_out(*k):
                     continue
                 if not (binf_x <= k[0] <= bsup_x):
                     continue
                 if not (binf_y <= k[1] <= bsup_y):
                     continue
-                if espace_matr.getValue(*k):
+                if espace_matr.get_val(*k):
                     continue  # blocage
                 voisins.append(k)
 
