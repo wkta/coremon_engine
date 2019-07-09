@@ -168,8 +168,8 @@ class EventReceiver(CogObject):
     def is_active(self):
         return self._active_receiver
 
-    def turn_on(self, prio=None):
-        self._manager.add_listener(self, prio)
+    def turn_on(self):
+        self._manager.add_listener(self)
         self._active_receiver = True
 
     def turn_off(self):
@@ -183,99 +183,45 @@ class EventReceiver(CogObject):
 
 
 class EventDispatcher:
-    binf_priority = 0
-    bsup_priority = 0
 
     def __init__(self):
-        self._assoc_recv_prio = dict()
-        self._assoc_prio_recv = dict()
+        self._queue = list()
 
-    def add_listener(self, obj, val_priorite=None):
-        assert isinstance(obj, EventReceiver)
-        assert obj not in self._assoc_recv_prio
-        cls = self.__class__
-
-        if val_priorite is None:
-            cls.bsup_priority += 1
-            p = cls.bsup_priority
-        else:
-            p = val_priorite
-            assert p not in self._assoc_prio_recv
-            if p < cls.binf_priority:
-                cls.binf_priority = p
-            elif p > cls.bsup_priority:
-                cls.bsup_priority = p
-
-        self._assoc_recv_prio[obj] = p
-        self._assoc_prio_recv[p] = obj
-
-    # - deprecated block --- ?
-    def _mod_priority(self, obj, chosen_p):
-        assert obj in self._assoc_recv_prio
-        self.remove_listener(obj)
-        self.add_listener(obj, chosen_p)
+    def add_listener(self, obj: EventReceiver):
+        self._queue.append(obj)
 
     def prioritize(self, obj):
-        self._mod_priority(obj, self.__class__.binf_priority - 1)
+        self._queue.remove(obj)
+        self._queue.insert(0, obj)
 
     def postpone(self, obj):
-        self._mod_priority(obj, self.__class__.bsup_priority + 1)
-
-    # ---
+        self._queue.remove(obj)
+        self._queue.append(obj)
 
     def remove_listener(self, obj):
-        if obj not in self._assoc_recv_prio:
-            return  # rien à faire
-
-        old_prio = self._assoc_recv_prio[obj]
-
-        del self._assoc_recv_prio[obj]
-        del self._assoc_prio_recv[old_prio]
-
-        cls = self.__class__
-        if old_prio == cls.binf_priority:
-            try:
-                cls.binf_priority = min(self._assoc_prio_recv.keys())
-            except ValueError:
-                cls.binf_priority = 0
-        elif old_prio == cls.bsup_priority:
-            try:
-                cls.bsup_priority = max(self._assoc_prio_recv.keys())
-            except ValueError:
-                cls.bsup_priority = 0
+        self._queue.remove(obj)
 
     def soft_reset(self):
-        for memb in tuple(self._assoc_recv_prio.keys()):
-            if memb not in self._assoc_recv_prio:
-                continue
-            if not memb.is_sticky():
-                self.remove_listener(memb)
+        nl = list()
+        for memb in self._queue:
+            if memb.is_sticky():
+                nl.append(memb)
+        self._queue = nl
 
     def hard_reset(self):
-        for memb in tuple(self._assoc_recv_prio.keys()):
-            if memb not in self._assoc_recv_prio:
-                continue
-            self.remove_listener(memb)
-        cls = self.__class__
-        cls.binf_priority = cls.bsup_priority = 0
+        del self._queue[:]
 
     def count_listeners(self):
-        return len(self._assoc_recv_prio)
+        return len(self._queue)
 
-    # - the most important method here!
-    def dispatch(self, cgm_event, source):
+    def dispatch(self, cgm_event, dispatcher):
         """
         :param cgm_event: instance of CgmEvent class, includes a type
-        :param source: None can be used as a wildcard value, denoting the global EventManager
-        :return:
+        :param dispatcher: None denotes the general EventDispatcher
         """
-
-        cls = self.__class__
-        for p in range(cls.binf_priority, cls.bsup_priority + 1):
-            if p in self._assoc_prio_recv:
-                stop_sig = self._assoc_prio_recv[p].proc_event(cgm_event, source)
-                if stop_sig:
-                    return
+        for recv in self._queue:
+            if recv.proc_event(cgm_event, dispatcher):
+                return
 
 
 @Singleton
