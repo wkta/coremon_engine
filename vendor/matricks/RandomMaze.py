@@ -95,6 +95,20 @@ class RandomMaze:
         self.tested_pos = set()
         self.recUncarve((1, 1))
 
+    def pick_walkable_cell(self):
+        # helps choosing a valid initial position for the avatar
+        floor = self.int_matrix
+        w, h = floor.get_size()
+        chosen_pos = [
+            random.randint(0, w-1),
+            random.randint(0, h-1)
+        ]
+        while floor.get_val(*chosen_pos) is None:  # i.e. a wall
+            # try again
+            chosen_pos[0] = random.randint(0, w-1)
+            chosen_pos[1] = random.randint(0, h-1)
+        return chosen_pos
+    
     def isRoomRegion(self, pos):
         val = self.int_matrix.get_val(*pos)
         return val in self.all_room_codes

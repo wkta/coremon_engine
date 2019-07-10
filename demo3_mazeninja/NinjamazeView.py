@@ -10,7 +10,8 @@ import os
 class NinjamazeView(EventReceiver):
 
     CELL_SIDE = 32  # px
-    BG_COL = (16, 64, 16)
+    WALL_COLOR = (8, 8, 24)
+    HIDDEN_CELL_COLOR = (24, 24, 24)
 
     def __init__(self, ref_mod):
         super().__init__()
@@ -36,7 +37,7 @@ class NinjamazeView(EventReceiver):
             self.pos_avatar = ev.new_pos
 
     def _draw_content(self, scr):
-        scr.fill(self.BG_COL)
+        scr.fill(self.WALL_COLOR)
 
         nw_corner = (0, 0)
         tmp_r4 = [None, None, None, None]
@@ -46,19 +47,20 @@ class NinjamazeView(EventReceiver):
         dim = self.mod.get_terrain().get_size()
         for i in range(dim[0]):
             for j in range(dim[1]):
+                # ignoring walls
                 tmp = self.mod.get_terrain().get_val(i, j)
-                if tmp is not None:
-                    #if tmp not in self.assoc_r_col:
-                    #    self.assoc_r_col[tmp] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-                    #col = self.assoc_r_col[tmp]
+                if tmp is None:
+                    continue
 
-                    tmp_r4[0], tmp_r4[1] = nw_corner
-                    tmp_r4[0] += i * self.CELL_SIDE
-                    tmp_r4[1] += j * self.CELL_SIDE
-                    tmp_r4[2] = tmp_r4[3] = self.CELL_SIDE
-                    #pygame.draw.rect(scr, col, tmp_r4)
+                tmp_r4[0], tmp_r4[1] = nw_corner
+                tmp_r4[0] += i * self.CELL_SIDE
+                tmp_r4[1] += j * self.CELL_SIDE
+                tmp_r4[2] = tmp_r4[3] = self.CELL_SIDE
+                if not self.mod.can_see((i,j)):  # hidden cell
+                    pygame.draw.rect(scr, self.HIDDEN_CELL_COLOR, tmp_r4)
+                else:  # visible tile
                     scr.blit(tuile, tmp_r4)
 
-        # - dessin avatar
+        # draw avatar process
         av_i, av_j = self.pos_avatar[0] * self.CELL_SIDE, self.pos_avatar[1] * self.CELL_SIDE
         scr.blit(self.avatar_apparence, (av_i, av_j, 32, 32) )
