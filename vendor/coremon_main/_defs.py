@@ -22,6 +22,7 @@ def enum_builder(to_upper, starting_index, *sequential, **named):
 
     enums['inv_map'] = tmp_inv_map
     enums['all_codes'] = tmp_all_codes
+    enums['last_code'] = len(sequential) + starting_index - 1
     return type('Enum', (), enums)
 
 

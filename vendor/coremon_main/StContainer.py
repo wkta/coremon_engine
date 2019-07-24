@@ -25,12 +25,10 @@ class StContainer:
             chemin = 'app.{}.state'.format(nom_module_py)
                 
             try:
-                print(str(chemin))
                 mod = __import__(chemin, fromlist=[nom_cl])
                 klass = getattr(mod, nom_cl)
 
                 # instanciation
-                print(str(klass))
                 obj = klass(id_choisi, nom_etat)
                 self.assoc_id_state_obj[id_choisi] = obj
                 

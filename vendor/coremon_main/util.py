@@ -2,8 +2,12 @@ import re
 from ._defs import enum_builder
 
 
+def enum_starting_from_n(n, *sequential, **named):
+    return enum_builder(False, n, *sequential, **named)
+
+
 def enum_starting_from_zero(*sequential, **named):
-    return enum_builder(False, 0, *sequential, **named)
+    return enum_starting_from_n(0, *sequential, **named)
 
 
 def underscore_format(name):
