@@ -2,8 +2,11 @@ from abc import ABCMeta, abstractmethod
 
 
 class Stack:
-    def __init__(self):
-        self.fifo_list = []
+    def __init__(self, given_seq=None):
+        if given_seq is None:
+            self.fifo_list = []
+        else:
+            self.fifo_list = list(given_seq)
 
     def push(self, element):
         self.fifo_list.append(element)
@@ -11,6 +14,12 @@ class Stack:
         # print()
         # print('PUSH')
         # print('etat de pile {}'.format(self.fifo_list))
+
+    def top_down_trav(self):
+        return reversed(self.fifo_list)
+
+    def bottom_up_trav(self):
+        return self.fifo_list
 
     def pop(self):
         try:

@@ -20,15 +20,15 @@ class VanillaGameCtrl(EventReceiver):
         assert isinstance(bool_val, bool)
         self._autoquit = bool_val
 
-    def _stop_game(self):
+    def _halt_the_game(self):
         self._running = False
 
     def proc_event(self, ev, source):
         if self._autoquit:
             if ev.type == constants.QUIT:
-                self._stop_game()
+                self._halt_the_game()
         if ev.type == EngineEvTypes.GAMEENDS:
-            self._running = False
+            self._halt_the_game()
 
     def loop(self):
         while self._running:
@@ -58,7 +58,7 @@ class StackBasedGameCtrl(VanillaGameCtrl):
         return self.__state_stack.peek()
 
     # redefinition
-    def _stop_game(self):
+    def _halt_the_game(self):
         while self.get_curr_state_ident() is not None:
             self._pop_state()
 
