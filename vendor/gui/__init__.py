@@ -3,5 +3,5 @@ from .scrolltext import ScrollText
 from .chatmodul import ChatModul
 from .spinner import Spinner
 from .spinner import Item
-from .button import Button
+from .HybridButton import HybridButton
 from .text import Text

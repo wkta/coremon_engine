@@ -12,11 +12,11 @@ def test_func():
     print( "Button clicked!")
 
 
-class Button(EventReceiver):
+class HybridButton(EventReceiver):
 
     HIDEOUS_PURPLE = (255, 0, 255)
 
-    def __init__(self, font, text, position_on_screen, callback=None, draw_background=True):
+    def __init__(self, font, text, position_on_screen, draw_background, callback, *args):
         super().__init__()
         padding_value = 20  # pixels
 
@@ -29,6 +29,8 @@ class Button(EventReceiver):
 
         # data
         self._callback = callback
+        self._args = args
+
         self._text = text
         self._hit = False
         
@@ -102,7 +104,10 @@ class Button(EventReceiver):
         pos = event.pos
         if self._hit and self._col_rect.collidepoint(pos):
             if self._callback:
-                self._callback()
+                if self._args:
+                    self._callback(*self._args)
+                else:
+                    self._callback()
         self._hit = False
         
     def on_mousemotion(self, event):
