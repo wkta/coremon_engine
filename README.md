@@ -25,8 +25,11 @@ optimize the production process of indie games meant to be published via the new
 SpriteSheet, RandomMaze for level generation, DijkstraPathfinder for pathfinding, etc.
 
 ## credits / creation date
-author: Thomas "wkta" Iwaszko (c)
+authors (c)
+- Thomas "wkta" Iwaszko
+- Phil Hassey
 
 The coremon engine development started somewhere around august 2018.
+The gui module by Phil Hassey, is older and has been borrowed to ease the creation of popups, buttons, etc.
 
 See LICENSE for license information.
