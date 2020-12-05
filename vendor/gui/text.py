@@ -1,43 +1,45 @@
-#!/usr/bin/env python
-#
-#Copyright 2006 DR0ID <dr0id@bluewin.ch> http://mypage.bluewin.ch/DR0ID
-#
-#
-#
-
-"""
-#TODO: documentation!
-"""
-
-__author__    = "$Author: DR0ID $"
-__version__   = "$Revision: 154 $"
-__date__      = "$Date: 2007-04-10 17:39:49 +0200 (Di, 10 Apr 2007) $"
-__license__   = ''
-__copyright__ = "DR0ID (c) 2007"
-
-
 import pygame
 
-class Text(object):
-    """
-    
-    """
-    
-    def __init__(self, text, font, position):
-        """
-        
-        """
-        
+
+class Text:
+
+    ANCHOR_TL_CORNER, ANCHOR_CENTER = range(2)
+
+    def __init__(self, text, font, position, anchortype=None):
         self.text = text
-        self.position = position
-        
+        self._position = position
+
+        if anchortype is None:
+            anchortype = self.ANCHOR_TL_CORNER
+
         size = font.size(text)
-        rect = pygame.Rect((0,0),size)
+        rect = pygame.Rect((0, 0), size)
         self.image = pygame.Surface(rect.size).convert()
-        self.image.fill((0,0,0))
-        self.image.set_colorkey((0,0,0))
-        
-        txtimg = font.render(text, 1, (255, 255, 255), (0, 0, 0))
-        xpos = (rect.width-size[0])/2
-        ypos = (rect.height-size[1])/2
+        self.image.fill((0, 0, 0))
+        self.image.set_colorkey((0, 0, 0))
+
+        txtimg = font.render(text, False, (255, 255, 255), (0, 0, 0))  # cant use antialias or it blends with bg color
+        xpos = (rect.width - size[0]) / 2
+        ypos = (rect.height - size[1]) / 2
         self.image.blit(txtimg, (xpos, ypos))
+
+        # compute the drawposition
+        if self.ANCHOR_TL_CORNER == anchortype:
+            self._draw_position = self._position
+        else:
+            self._draw_position = int(self._position[0] - size[0]/2), int(self._position[1] - size[1]/2)
+        # - debug
+        # print(self.drawposition)
+
+    def paint(self, surface):
+        surface.blit(self.image, self.drawposition)
+
+    @property
+    # -- DEPRECATED, lets keep it only for back-compatibility --
+    def position(self):
+        print('*warning deprecated method called*')
+        return self._position
+    
+    @property
+    def drawposition(self):
+        return self._draw_position

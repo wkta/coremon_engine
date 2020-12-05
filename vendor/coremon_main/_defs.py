@@ -6,6 +6,9 @@ FIRST_ENGIN_TYPE = USEREVENT + 1
 FIRST_CUSTO_TYPE = FIRST_ENGIN_TYPE + 20  # therefore, 20 is the maximal amount of engine events
 
 
+vernum = '0.0.3'
+
+
 def enum_builder(to_upper, starting_index, *sequential, **named):
     domaine = range(starting_index, len(sequential) + starting_index)
     enums = dict(zip(sequential, domaine), **named)

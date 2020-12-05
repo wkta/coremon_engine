@@ -9,7 +9,7 @@ import pygame
 from pygame import constants
 
 from .util import enum_starting_from_zero
-from ._defs import EngineEvTypes, enum_for_custom_event_types
+from ._defs import EngineEvTypes, enum_for_custom_event_types, vernum
 from ._events import EventManager, EventReceiver, CgmEvent, EventDispatcher, CogObject
 from .structures import BaseGameState
 
