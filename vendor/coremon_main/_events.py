@@ -11,6 +11,11 @@ from coremon_main.Singleton import Singleton
 from ._defs import EngineEvTypes, FIRST_CUSTO_TYPE
 
 
+# flag/basic queue for headless mode
+headless_mode = False
+simu_queue = list()
+
+
 class CgmEvent:
     ETYPE_ATTR_NAME = 'cgm_type'
     ref_enum_custom = None
@@ -142,13 +147,16 @@ class CogObject:
         return None
 
     def pev(self, ev_type, **kwargs):
+
         if ev_type == EngineEvTypes.LOGICUPDATE:
             adhoc_ev = self._lu_cached_ev
             if self._optim_counter == 0:
                 adhoc_ev.curr_t = time.time()
             self._optim_counter = self._optim_counter % self._n_times_same_timeval
+
         elif ev_type == EngineEvTypes.PAINT:
             adhoc_ev = self._paint_cached_ev
+
         else:
             adhoc_ev = CgmEvent(ev_type, source=self, **kwargs)
 
@@ -175,7 +183,6 @@ class EventReceiver(CogObject):
     def turn_off(self):
         self._manager.remove_listener(self)
         self._active_receiver = False
-
 
     @abstractmethod
     def proc_event(self, ev, source):
@@ -230,15 +237,33 @@ class EventManager(EventDispatcher):
     the root source for all events
     """
 
-    def post(self, engin_ev):
-        pygame.event.post(engin_ev.wrap())
+    def post(self, given_evt):
+        global headless_mode, simu_queue
+        if headless_mode:
+            simu_queue.append(given_evt.wrap())
+        else:
+            pygame.event.post(given_evt.wrap())
 
     def update(self):
-        for pygame_reg_ev in pygame.event.get():
-            # - ev. classiques
-            if not CgmEvent.ext_tev_detection(pygame_reg_ev.type):
-                self.dispatch(pygame_reg_ev, None)
-                continue
-            # - ev. étendus
-            cgm_ev = CgmEvent.unwrap(pygame_reg_ev)
-            self.dispatch(cgm_ev, None)
+        global headless_mode, simu_queue
+
+        if headless_mode:  # HEADLESS mode
+            simu_queue.reverse()
+            while len(simu_queue) > 0:
+                rev = simu_queue.pop()
+                if not CgmEvent.ext_tev_detection(rev.type):  # ev. classique
+                    self.dispatch(rev, None)
+                else:
+                    cgm_ev = CgmEvent.unwrap(rev)  # ev. étendu
+                    self.dispatch(cgm_ev, None)
+            return
+
+        rev = pygame.event.poll()
+        while rev.type != pygame.NOEVENT:
+            if not CgmEvent.ext_tev_detection(rev.type):  # ev. classique
+                self.dispatch(rev, None)
+            else:
+                cgm_ev = CgmEvent.unwrap(rev)  # ev. étendu
+                self.dispatch(cgm_ev, None)
+
+            rev = pygame.event.poll()

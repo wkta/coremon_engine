@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from pygame import constants
 
@@ -38,6 +40,19 @@ class VanillaGameCtrl(EventReceiver):
 
             pygame.display.flip()
             self._clock.tick(self.max_fps)
+
+
+class HeadlessRunnerCtrl(VanillaGameCtrl):
+    def __init__(self, freq_exec_s):
+        super().__init__()
+        self.max_fps = None
+        self._freq = freq_exec_s
+
+    def loop(self):
+        while self._running:
+            time.sleep(self._freq)
+            self.pev(EngineEvTypes.LOGICUPDATE)
+            self._manager.update()
 
 
 class StackBasedGameCtrl(VanillaGameCtrl):
